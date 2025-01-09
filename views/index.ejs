@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Trends</title>
+</head>
+<body>
+    <h1>Twitter Trends</h1>
+    <button id="runScript">Run Script</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("runScript").addEventListener("click", async () => {
+            const response = await fetch("/run-script");
+            const data = await response.json();
+            const resultDiv = document.getElementById("result");
+            if (data.error) {
+                resultDiv.textContent = data.error;
+            } else {
+                resultDiv.innerHTML = `
+                    <p>These are the most happening topics as on ${data.timestamp}</p>
+                    <ul>
+                        ${data.trends.map((trend) => `<li>${trend}</li>`).join("")}
+                    </ul>
+                    <p>The IP address used for this query was ${data.proxyIp}.</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
